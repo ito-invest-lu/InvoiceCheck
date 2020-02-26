@@ -21,7 +21,7 @@ COPY . .
 
 RUN ng build --prod
 
-FROM nginx-alpine
+FROM nginx:alpine
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
