@@ -1,0 +1,67 @@
+<mat-card name="invoiceFilter">
+    <form [formGroup]="filterForm" novalidate (ngSubmit)="displayInvoice()">
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="left center">
+            <div fxFlexOffset="20px">
+                <mat-form-field class="full-width">
+                    <mat-label>Société</mat-label>
+                    <mat-select matNativeControl required formControlName="Company" name="company">
+                        <mat-option value="001">Socoma</mat-option>
+                        <mat-option value="100">Ross 128</mat-option>
+                        <mat-option value="200">Imply</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxFlexOffset="20px">
+                <mat-form-field class="full-width">
+                    <mat-label>Journal</mat-label>
+                    <mat-select matNativeControl required formControlName="Journal" name="journal">
+                        <mat-option *ngFor="let journal of journals | async" [value]="journal">
+                            {{journal}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxFlexOffset="20px">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Numéro" formControlName="Number" [matAutocomplete]="autoNumber">
+                    <mat-autocomplete #autoNumber="matAutocomplete">
+                        <mat-option *ngFor="let number of filteredNumbers | async" [value]="number">
+                        {{number}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div fxFlexOffset="20px">
+                <button mat-raised-button color="primary" type="submit">Afficher</button>
+            </div>
+        </div>
+    </form>
+</mat-card>
+<mat-card name="invoiceInfo" *ngIf="invoice">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="left center">
+        <div fxFlexOffset="20px">
+            {{invoice.Number}}
+        </div>
+        <div fxFlexOffset="20px">
+            {{invoice.Date | date:'dd/MM/yyyy'}}
+        </div>
+        <div fxFlexOffset="20px">
+            <button mat-flat-button color="primary">{{invoice.Periode}}</button>
+        </div>
+        <div fxFlexOffset="20px">
+            <button mat-flat-button color="warn">{{invoice.Fournisseur}}</button>
+        </div>
+        <div fxFlexOffset="20px">
+            <button mat-flat-button color="accent">{{invoice.Chantier || "Aucun" }}</button>
+        </div>
+        <div fxFlexOffset="20px">
+            <button mat-flat-button style="background-color:#00BCD4;">{{invoice.Activite || "Aucun" }}</button>
+        </div>
+        <div fxFlexOffset="20px">
+            {{invoice.Total}} €
+        </div>
+    </div>
+</mat-card>
+<mat-card name="pdfDisplay" *ngIf="invoice">
+    <ngx-extended-pdf-viewer [src]="pdf" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
+</mat-card>
