@@ -3,7 +3,7 @@ version: 2.1
 executors:
   docker-publisher:
     environment:
-      IMAGE_NAME: becloudbe/timeindashboard
+      IMAGE_NAME: becloudbe/invoicecheck
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
@@ -49,10 +49,10 @@ workflows:
       - build:
           filters:
             branches:
-              only: latest
+              only: master
       - publish-latest:
           requires:
             - build
           filters:
             branches:
-              only: latest
+              only: master
