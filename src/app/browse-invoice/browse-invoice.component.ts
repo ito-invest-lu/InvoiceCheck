@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { map, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { map, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { InvoiceService, IInvoiceQuery, IInvoice } from '../invoice.service';
 
@@ -22,7 +23,11 @@ export class BrowseInvoiceComponent implements OnInit {
   
   pdf : string;
 
-  constructor(private fb: FormBuilder, private is: InvoiceService) {}
+  constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private fb: FormBuilder, 
+        private is: InvoiceService) {}
 
   ngOnInit() {
     this.filterForm = this.fb.group({
@@ -48,9 +53,21 @@ export class BrowseInvoiceComponent implements OnInit {
     this.filterForm.get('Number').valueChanges.debounceTime(600).distinctUntilChanged().subscribe(val => {
       this.filteredNumbers = this.is.getNumberList(this.filterForm.getRawValue());
     });
+      
+    this.route.paramMap.subscribe(val => {
+      if(val.get('number')) {
+        this.filterForm.setValue({Company : val.get('company'),Journal : val.get('journal'),Number : val.get('number')});
+        this.showInvoice();
+      }
+    })
+    
   }
   
   displayInvoice() {
+    this.router.navigate(['/invoice', this.filterForm.get('Company').value, this.filterForm.get('Journal').value, this.filterForm.get('Number').value])
+  }
+  
+  showInvoice() {
     this.is.getInvoiceList(this.filterForm.getRawValue()).subscribe(val => {
       this.invoice = val[0];
     });

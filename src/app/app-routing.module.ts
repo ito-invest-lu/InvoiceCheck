@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { BrowseInvoiceComponent } from './browse-invoice/browse-invoice.component';
 
 const routes: Routes = [
-  { path: 'browse', component: BrowseInvoiceComponent }
+  { path: 'browse', component: BrowseInvoiceComponent },
+  { path: 'invoice/:company/:journal/:number', component: BrowseInvoiceComponent },
 ];
 
 @NgModule({
