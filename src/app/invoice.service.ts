@@ -40,6 +40,8 @@ export interface IChantier {
 
 export class InvoiceService {
 
+  public invoice : IInvoice;
+
   constructor(private http: Http) { }
   
   getChantiers() {

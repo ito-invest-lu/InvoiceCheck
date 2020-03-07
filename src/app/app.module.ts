@@ -20,15 +20,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { EditChantierComponent } from './edit-chantier/edit-chantier.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppNavComponent,
-    BrowseInvoiceComponent
+    BrowseInvoiceComponent,
+    EditChantierComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +49,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     MatSelectModule,
     MatRadioModule,
     MatAutocompleteModule,
+    MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
     NgxExtendedPdfViewerModule,

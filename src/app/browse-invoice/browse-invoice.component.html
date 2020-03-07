@@ -52,7 +52,7 @@
             <button mat-flat-button color="warn">{{invoice.Fournisseur}}</button>
         </div>
         <div fxFlexOffset="20px">
-            <button mat-flat-button color="accent">{{invoice.Chantier || "Aucun" }}</button>
+            <button mat-flat-button color="accent" (click)="editChantier()">{{invoice.Chantier || "Aucun" }}</button>
         </div>
         <div fxFlexOffset="20px">
             <button mat-flat-button style="background-color:#00BCD4;">{{invoice.Activite || "Aucun" }}</button>
