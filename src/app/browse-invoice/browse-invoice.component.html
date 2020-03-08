@@ -55,13 +55,13 @@
             <button mat-flat-button color="accent" (click)="editChantier()">{{invoice.Chantier || "Aucun" }}</button>
         </div>
         <div fxFlexOffset="20px">
-            <button mat-flat-button style="background-color:#00BCD4;">{{invoice.Activite || "Aucun" }}</button>
+            <button mat-flat-button style="background-color:#00BCD4;" (click)="editActivite()">{{invoice.Activite || "Aucun" }}</button>
         </div>
         <div fxFlexOffset="20px">
             {{invoice.Total}} €
         </div>
     </div>
 </mat-card>
-<mat-card name="pdfDisplay" *ngIf="invoice">
+<mat-card name="pdfDisplay" *ngIf="pdf">
     <ngx-extended-pdf-viewer [src]="pdf" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
 </mat-card>

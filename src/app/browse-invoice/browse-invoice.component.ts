@@ -3,8 +3,11 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { Observable, of } from 'rxjs';
 import { map, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { InvoiceService, IInvoiceQuery, IInvoice } from '../invoice.service';
+import { EditChantierComponent } from '../edit-chantier/edit-chantier.component';
+import { EditActiviteComponent } from '../edit-activite/edit-activite.component';
 
 @Component({
   selector: 'app-browse-invoice',
@@ -27,7 +30,8 @@ export class BrowseInvoiceComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private fb: FormBuilder, 
-        private is: InvoiceService) {}
+        private is: InvoiceService,
+        public dialog: MatDialog) {}
 
   ngOnInit() {
     this.filterForm = this.fb.group({
@@ -50,30 +54,40 @@ export class BrowseInvoiceComponent implements OnInit {
       }
     });
     
-    this.filterForm.get('Number').valueChanges.debounceTime(600).distinctUntilChanged().subscribe(val => {
+    this.filterForm.get('Number').valueChanges.pipe(debounceTime(600)).pipe(distinctUntilChanged()).subscribe(val => {
       this.filteredNumbers = this.is.getNumberList(this.filterForm.getRawValue());
     });
       
+    this.is.invoice.subscribe(val => {
+      this.invoice = val;
+    });
+    
+    this.is.invoicePDF.subscribe(val => {
+      if(val) {
+        this.pdf = 'https://scanin.socomaconstruction.com/' + val.PDF;
+      }
+    });
+    
     this.route.paramMap.subscribe(val => {
       if(val.get('number')) {
         this.filterForm.setValue({Company : val.get('company'),Journal : val.get('journal'),Number : val.get('number')});
-        this.showInvoice();
+        this.is.getInvoiceFromServer(this.filterForm.getRawValue());
       }
-    })
-    
+    });
   }
   
   displayInvoice() {
-    this.router.navigate(['/invoice', this.filterForm.get('Company').value, this.filterForm.get('Journal').value, this.filterForm.get('Number').value])
+    if(this.filterForm.get('Number').value) {
+      this.router.navigate(['/invoice', this.filterForm.get('Company').value, this.filterForm.get('Journal').value, this.filterForm.get('Number').value])
+    }
   }
-  
-  showInvoice() {
-    this.is.getInvoiceList(this.filterForm.getRawValue()).subscribe(val => {
-      this.invoice = val[0];
-    });
-    this.is.getInvoicePDFList(this.filterForm.getRawValue()).subscribe(val => {
-      this.pdf = 'https://scanin.socomaconstruction.com/'+val[0].PDF;
-    });
+
+  editChantier() {
+    this.dialog.open(EditChantierComponent);
+  }
+
+  editActivite() {
+    this.dialog.open(EditActiviteComponent);
   }
 
 }

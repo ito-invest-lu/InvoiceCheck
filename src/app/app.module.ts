@@ -25,13 +25,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { EditChantierComponent } from './edit-chantier/edit-chantier.component';
+import { EditActiviteComponent } from './edit-activite/edit-activite.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppNavComponent,
     BrowseInvoiceComponent,
-    EditChantierComponent
+    EditChantierComponent,
+    EditActiviteComponent
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { InvoiceService, IInvoice, IChantier } from '../invoice.service';
 
 import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-chantier',
@@ -17,9 +18,11 @@ export class EditChantierComponent implements OnInit {
 
   filterForm: FormGroup;
 
-  chantiers : Observable<IChantier[]>;
+  chantier : IChantier;
 
-  filteredChantiers: Observable<IChantier[]>;
+  chantiers : IChantier[];
+
+  filteredChantiers: IChantier[];
 
   invoice : IInvoice;
 
@@ -29,10 +32,15 @@ export class EditChantierComponent implements OnInit {
     this.filterForm = this.fb.group({
       "Chantier": new FormControl()
     })
-    this.invoice = this.is.invoice;
-    this.chantiers = this.is.getChantiers();
-    this.filterForm.get('Chantier').valueChanges.debounceTime(600).distinctUntilChanged().subscribe(val => {
-      this.filteredChantiers = this.chantiers.map(chantiers => chantiers.filter(c => c.Chantier && c.Chantier.toLowerCase().includes(val.toLowerCase())));
+    this.is.invoice.subscribe(val => {
+      this.invoice = val;
+    });
+    
+    this.is.getChantiers().subscribe(val => this.chantiers = val);
+    
+    this.filterForm.get('Chantier').valueChanges.pipe(debounceTime(600)).pipe(distinctUntilChanged()).subscribe(val => {
+      this.filteredChantiers = this.chantiers.filter(c => c.Chantier && c.Chantier.toLowerCase().includes(val.toLowerCase()));
+      this.chantier = this.chantiers.filter(c => c.ChantierCode && c.ChantierCode == val)[0];
     });
   }
   
@@ -41,7 +49,8 @@ export class EditChantierComponent implements OnInit {
   }
 
   changeChantier(): void {
-    console.log('Change Chantier to ' + this.filterForm.get('Chantier').value);
+    console.log('Change Chantier to ' + this.chantier.ChantierCode);
+    this.is.changeChantier(this.chantier.ChantierCode);
     this.dialogRef.close();
   }
 

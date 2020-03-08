@@ -1,19 +1,22 @@
 <h1 mat-dialog-title>Change le chantier de {{invoice.Number}}</h1>
-<form [formGroup]="filterForm" novalidate (ngSubmit)="changeChantier()">
+<form [formGroup]="filterForm" novalidate>
 <div mat-dialog-content>
-  Le chantier est actuellement {{invoice.Chantier}}<br/>
-  <mat-form-field>
+  <mat-form-field *ngIf="!chantier">
     <mat-label>Nouveau Chantier</mat-label>
     <input matInput placeholder="Changer...." [matAutocomplete]="autoChantier" formControlName="Chantier">
     <mat-autocomplete #autoChantier="matAutocomplete">
-        <mat-option *ngFor="let c of filteredChantiers | async" [value]="c.Chantier">
+        <mat-option *ngFor="let c of filteredChantiers" [value]="c.ChantierCode">
         {{c.Chantier}}
         </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+  <div *ngIf="chantier">
+    Le chantier est actuellement {{invoice.Chantier || 'Aucun'}}<br/>
+    et deviendra {{chantier.ChantierCode}} - {{ chantier.Chantier}}.
+  </div>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button type="submit">Ok</button>
+  <button mat-button (click)="changeChantier()">Ok</button>
 </div>
 </form>
