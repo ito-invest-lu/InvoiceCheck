@@ -60,6 +60,12 @@
         <div fxFlexOffset="20px">
             {{invoice.Total}} €
         </div>
+        <div fxFlexOffset="20px" *ngIf="invoice.IsPaid == 1">
+            <button mat-flat-button style="background-color:#ffc107;">Payé</button>
+        </div>
+        <div fxFlexOffset="20px" *ngIf="invoice.IsPaid == 0">
+            <button mat-flat-button style="color:#000000; background-color:#efefef;">Non Payé</button>
+        </div>
     </div>
 </mat-card>
 <mat-card name="pdfDisplay" *ngIf="pdf">

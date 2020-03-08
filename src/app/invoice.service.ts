@@ -22,7 +22,8 @@ export interface IInvoice {
     "Fournisseur": string,
     "Chantier": string,
     "Activite": string,
-    "Total": number
+    "Total": number,
+    "IsPaid": number,
 }
 
 export interface IInvoicePDF {
