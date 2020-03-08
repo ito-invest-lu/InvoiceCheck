@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Change l'activité de {{invoice.Number}}</h1>
+<form [formGroup]="filterForm" novalidate>
+<div mat-dialog-content>
+  <mat-form-field *ngIf="!activite">
+    <mat-label>Nouvelle activité</mat-label>
+    <input matInput placeholder="Changer...." [matAutocomplete]="autoActivite" formControlName="Activite">
+    <mat-autocomplete #autoActivite="matAutocomplete">
+        <mat-option *ngFor="let c of filteredActivites" [value]="c.ActiviteCode">
+        {{c.Activite}}
+        </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div *ngIf="activite">
+    Le activite est actuellement {{invoice.Activite || 'Aucun'}}<br/>
+    et deviendra {{activite.ActiviteCode}} - {{ activite.Activite}}.
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button (click)="changeActivite()">Ok</button>
+</div>
+</form>
+
