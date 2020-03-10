@@ -68,7 +68,7 @@ export class InvoiceService {
   }
   
   getActivites() {
-    return this.http.get(`${url}/activites`)
+    return this.http.get(`${url}/invoice_activites`)
       .pipe(map(
           res => { 
             return <IActivite[]>res.json();
