@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from "@angular/http";
 import { environment } from '../environments/environment';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable } from "rxjs/Observable";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { take, map } from 'rxjs/operators';
 
 const url = environment.server;
 
@@ -23,7 +23,7 @@ export interface IInvoice {
     "Chantier": string,
     "Activite": string,
     "Total": number,
-    "IsPaid": number,
+    "IsPaid" : number
 }
 
 export interface IInvoicePDF {
@@ -49,56 +49,59 @@ export interface IActivite {
 
 export class InvoiceService {
 
-  public invoice: BehaviorSubject<IInvoice> = new BehaviorSubject(undefined);
+  public invoice : BehaviorSubject<IInvoice> = new BehaviorSubject(undefined);
   
-  public invoicePDF: BehaviorSubject<IInvoicePDF> = new BehaviorSubject(undefined);
+  public invoicePDF : BehaviorSubject<IInvoicePDF> = new BehaviorSubject(undefined);
 
   constructor(private http: Http) { }
   
-  getActivites() {
-    return this.http.get(`${url}/activites`)
-            .pipe(map((response: Response) => {
-                 return <IActivite[]>response.json();
-             },
-              error => {
-                console.error('There was an error during the request');
-                console.log(error);
-              }));
-  }
-  
   getChantiers() {
     return this.http.get(`${url}/chantiers`)
-            .pipe(map((response: Response) => {
-                 return <IChantier[]>response.json();
-             },
-              error => {
-                console.error('There was an error during the request');
-                console.log(error);
-              }));
+      .pipe(map(
+          res => { 
+            return <IChantier[]>res.json();
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          }));
+  }
+  
+  getActivites() {
+    return this.http.get(`${url}/activites`)
+      .pipe(map(
+          res => { 
+            return <IActivite[]>res.json();
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          }));
   }
   
   getNumberList(query:IInvoiceQuery) {
     return this.http.get(`${url}/invoice_number?numero=${query.Number}&journal=${query.Journal}&company=${query.Company}`)
-            .pipe(map((response: Response) => {
-                 return <string[]>response.json().map(item => item.Number);
-              },
-              error => {
-                console.error('There was an error during the request');
-                console.log(error);
-              }));
+      .pipe(map(
+          res => { 
+            return <string[]>res.json().map(item => item.Number);
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          }));
   }
   
   getInvoiceFromServer(query:IInvoiceQuery) {
-    if(query.Number) {
       this.http.get(`${url}/invoices?numero=${query.Number}&journal=${query.Journal}&company=${query.Company}`)
         .subscribe(
           res => { 
-            this.invoice.next(res.json()[0]);
+            this.invoice.next(res[0]);
           },
           error => {
             console.error('There was an error during the request');
             console.log(error);
           });
+          
       this.http.get(`${url}/invoice_pdfs?numero=${query.Number}&journal=${query.Journal}&company=${query.Company}`)
         .subscribe(
           res => { 
@@ -108,7 +111,6 @@ export class InvoiceService {
             console.error('There was an error during the request');
             console.log(error);
           });
-    }
   }
   
   changeChantier(to_code: string) {

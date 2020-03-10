@@ -1,5 +1,5 @@
 <mat-card name="invoiceFilter">
-    <form [formGroup]="filterForm" novalidate (ngSubmit)="displayInvoice()">
+    <form [formGroup]="filterForm" novalidate >
         <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="left center">
             <div fxFlexOffset="20px">
                 <mat-form-field class="full-width">
@@ -32,7 +32,10 @@
                 </mat-form-field>
             </div>
             <div fxFlexOffset="20px">
-                <button mat-raised-button color="primary" type="submit">Afficher</button>
+                <button mat-raised-button color="primary" (click)="displayInvoice()">Afficher</button>
+            </div>
+            <div fxFlexOffset="20px">
+                <button mat-raised-button color="secondary" (click)="displayNextInvoice()">Suivante ></button>
             </div>
         </div>
     </form>
