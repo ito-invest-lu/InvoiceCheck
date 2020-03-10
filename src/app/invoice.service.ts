@@ -95,7 +95,7 @@ export class InvoiceService {
       this.http.get(`${url}/invoices?numero=${query.Number}&journal=${query.Journal}&company=${query.Company}`)
         .subscribe(
           res => { 
-            this.invoice.next(res[0]);
+            this.invoice.next(res.json()[0]);
           },
           error => {
             console.error('There was an error during the request');

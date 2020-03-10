@@ -84,7 +84,7 @@ export class BrowseInvoiceComponent implements OnInit {
 
   displayNextInvoice() {
     if(this.filterForm.get('Number').value) {
-      this.filterForm.setValue({'Company' : this.filterForm.get('Company').value , 'Journal' : this.filterForm.get('Journal').value , 'Number' : Number(this.filterForm.get('Number').value) + 1 })
+      this.router.navigate(['/invoice', this.filterForm.get('Company').value, this.filterForm.get('Journal').value, Number(this.filterForm.get('Number').value) + 1])
     }
   } 
 
