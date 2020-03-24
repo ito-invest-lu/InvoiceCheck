@@ -7,6 +7,18 @@ import { take, map } from 'rxjs/operators';
 
 const url = environment.server;
 
+export interface IBudgetLine {
+    "Id": string,
+    "ChantierCode": string,
+    "Chantier": string,
+    "ActiviteCode": string,
+    "Activite": string,
+    "Date": Date,
+    "Origine": string,
+    "Quantite": number,
+    "Montant": number,
+}
+
 export interface IInvoiceQuery {
     "Company": string,
     "Journal": string,
@@ -52,6 +64,12 @@ export class InvoiceService {
   public invoice : BehaviorSubject<IInvoice> = new BehaviorSubject(undefined);
   
   public invoicePDF : BehaviorSubject<IInvoicePDF> = new BehaviorSubject(undefined);
+
+  public chantier : BehaviorSubject<IChantier> = new BehaviorSubject(undefined);
+  
+  public budget_lines : BehaviorSubject<IBudgetLine[]> = new BehaviorSubject(undefined);
+  
+  public budget_line : BehaviorSubject<IBudgetLine> = new BehaviorSubject(undefined);
 
   constructor(private http: Http) { }
   
@@ -141,6 +159,38 @@ export class InvoiceService {
                 console.log(error);
               });
         });
+  }
+  
+  getBudgetFromServer(chantier: string) {
+      this.http.get(`${url}/budget?chantier=${chantier}`)
+        .subscribe(
+          res => { 
+            this.getChantiers().subscribe(list => 
+            {
+              let ch = list.filter(c => c.ChantierCode && c.ChantierCode == chantier)[0];
+              this.chantier.next(ch);
+            });
+            this.budget_lines.next(res.json());
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          });
+  }
+  
+  addBudgetLine(chantier : IChantier, data : any) {
+    
+    data['Chantier'] = chantier.ChantierCode;
+    
+    this.http.post(`${url}/add_budget_line`, data)
+        .subscribe(
+          res => { 
+            this.budget_lines.next(res.json());
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          });
   }
   
   private handleError(error: Response) {

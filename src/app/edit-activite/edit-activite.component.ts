@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 
 import { InvoiceService, IInvoice, IActivite } from '../invoice.service';
 
-import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
@@ -32,6 +31,7 @@ export class EditActiviteComponent implements OnInit {
     this.filterForm = this.fb.group({
       "Activite": new FormControl()
     })
+    
     this.is.invoice.subscribe(val => {
       this.invoice = val;
     });

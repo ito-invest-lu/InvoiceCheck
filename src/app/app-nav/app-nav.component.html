@@ -6,6 +6,7 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/browse">Check Factures</a>
+      <a mat-list-item routerLink="/edit">Edit Budget</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -18,7 +19,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>InvoiceCheck</span>
+      <span>Contrôle Analytique</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
