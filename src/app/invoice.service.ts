@@ -9,8 +9,8 @@ const url = environment.server;
 
 export interface IBudgetLine {
     "Id": string,
-    "ChantierCode": string,
-    "Chantier": string,
+    "ClientCode": string,
+    "Client": string,
     "ActiviteCode": string,
     "Activite": string,
     "Date": Date,
@@ -178,11 +178,59 @@ export class InvoiceService {
           });
   }
   
-  addBudgetLine(chantier : IChantier, data : any) {
-    
-    data['Chantier'] = chantier.ChantierCode;
-    
-    this.http.post(`${url}/add_budget_line`, data)
+  newBudgetLine() {
+    this.chantier.pipe(take(1)).subscribe(chantier => { 
+      let new_line = {
+        Id: undefined,
+        ClientCode: chantier.ChantierCode,
+        Client: chantier.Chantier,
+        ActiviteCode: undefined,
+        Activite: undefined,
+        Date: new Date(),
+        Origine: "",
+        Quantite: 0,
+        Montant: 0,
+      }
+      this.budget_line.next(new_line);
+    });
+  }
+  
+  loadBudgetLine(line : IBudgetLine) {
+    this.budget_line.next(line);
+  }
+  
+  copyBudgetLine(old_line : IBudgetLine) {
+    let new_line = Object.assign(Object.create(old_line), old_line);
+    new_line.Id = undefined;
+    this.budget_line.next(new_line);
+  }
+  
+  saveBudgetLine(line : IBudgetLine) { 
+    if(line.Id) {
+      this.http.patch(`${url}/budget_line/${line.Id}`, line)
+          .subscribe(
+            res => { 
+              this.budget_lines.next(res.json());
+            },
+            error => {
+              console.error('There was an error during the request');
+              console.log(error);
+            });
+    } else {
+      this.http.post(`${url}/budget_line`, line)
+          .subscribe(
+            res => { 
+              this.budget_lines.next(res.json());
+            },
+            error => {
+              console.error('There was an error during the request');
+              console.log(error);
+            });
+    }
+  }
+  
+  deleteBudgetLine(line : IBudgetLine) { 
+    this.http.delete(`${url}/budget_line/${line.Id}`)
         .subscribe(
           res => { 
             this.budget_lines.next(res.json());

@@ -20,7 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MAT_AUTOCOMPLETE_DEFAULT_OPTIONS } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
@@ -78,6 +78,7 @@ registerLocaleData(localeFr, 'fr');
     {provide: LOCALE_ID, useValue: 'fr-BE' },
     {provide: MAT_DATE_LOCALE, useValue: 'fr-BE'},
     {provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR'},
+    {provide: MAT_AUTOCOMPLETE_DEFAULT_OPTIONS, useValue: {autoActiveFirstOption: true}},
   ],
   bootstrap: [AppComponent]
 })
