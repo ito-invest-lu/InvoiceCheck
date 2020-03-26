@@ -1,0 +1,48 @@
+.main-container {
+    height: 100%;
+}
+
+table{
+  width: 100%;
+}
+
+.mat-column-id {
+    flex: 0 0 25% !important;
+    width: 30px !important;
+}
+
+.mat-column-activite {
+    flex: 0 0 25% !important;
+    width: 120px !important;
+}
+
+.mat-column-date {
+    flex: 0 0 25% !important;
+    width: 100px !important;
+}
+
+.mat-column-origine {
+    flex: 0 0 25% !important;
+    width: 50%;
+}
+
+.mat-column-quantite {
+    flex: 0 0 25% !important;
+    width: 120px !important;
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.mat-column-montant {
+    flex: 0 0 25% !important;
+    width: 120px !important;
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.mat-column-actions {
+    flex: 0 0 25% !important;
+    width: 160px;
+    text-align: center;
+    justify-content: center;
+}

@@ -1,0 +1,66 @@
+<h1 mat-dialog-title>Ligne budgétaire</h1>
+<form [formGroup]="filterForm" novalidate>
+    <div mat-dialog-content>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="left center" fxLayoutGap="5px">
+            <mat-form-field>
+                <mat-label>Code Activité</mat-label>
+                <input matInput placeholder="Code Activité...." [matAutocomplete]="autoActiviteCode" formControlName="ActiviteCode">
+                <mat-autocomplete #autoActiviteCode="matAutocomplete">
+                    <mat-option *ngFor="let c of filteredActivites" [value]="c.ActiviteCode">
+                        {{c.ActiviteCode}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Activité</mat-label>
+                <input matInput placeholder="Activité...." [matAutocomplete]="autoActivite" formControlName="Activite">
+                <mat-autocomplete #autoActivite="matAutocomplete">
+                    <mat-option *ngFor="let c of filteredActivites" [value]="c.Activite">
+                        {{c.Activite}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="left center">
+            <mat-form-field>
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="left center">
+            <mat-form-field>
+                <mat-label>Origine</mat-label>
+                <input #origine matInput formControlName="Origine">
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="left center">
+            <div>
+                <mat-form-field>
+                    <mat-label>Quantité</mat-label>
+                    <input matInput formControlName="Quantite">
+                </mat-form-field>
+            </div>
+            <div fxFlexOffset="20px">
+                <mat-form-field>
+                    <mat-label>Montant</mat-label>
+                    <input matInput formControlName="Montant">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutAlign="left center">
+            <div>
+                <button mat-raised-button (click)="onNewClick()" class="mat-primary">New</button>
+            </div>
+            <div>
+                <button mat-raised-button (click)="onOkClick()" class="mat-primary">Ok</button>
+            </div>
+            <div fxFlexOffset="20px">
+                <button mat-button (click)="onNoClick()">No Thanks</button>
+            </div>
+        </div>
+    </div>
+</form>

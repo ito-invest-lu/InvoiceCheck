@@ -1,0 +1,94 @@
+<div fxLayout="column">
+    <div fxFlex="97.5px">
+        <mat-card name="chantierFilter">
+            <form [formGroup]="filterForm" novalidate >
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="left center">
+                    <div fxFlexOffset="20px">
+                      <mat-form-field>
+                        <mat-label>Chantier</mat-label>
+                        <input matInput placeholder="Changer...." [matAutocomplete]="autoChantier" formControlName="Chantier">
+                        <mat-autocomplete #autoChantier="matAutocomplete">
+                            <mat-option *ngFor="let c of filteredChantiers" [value]="c.ChantierCode">
+                            {{c.Chantier}}
+                            </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlexOffset="20px">
+                        <button mat-raised-button color="secondary" (click)="displayChantier()">Charger</button>
+                    </div>
+                    <div fxFlexOffset="20px" *ngIf="chantier">
+                        <button mat-raised-button class="mat-primary">{{chantier.Chantier}}</button>
+                    </div>
+                    <div fxFlexOffset="20px" *ngIf="lines">
+                        Total : {{montant  | currency }} et {{quantite}} h
+                    </div>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+    <div fxFlex="600px" style="overflow:auto;">
+        <mat-card name="nobudgetLines" *ngIf="chantier">
+            <span *ngIf="!lines">Pas encore de budget pour ce chantier.</span>
+            <table mat-table *ngIf="lines" [dataSource]="lines" class="mat-elevation-z8" class="scrollable">
+        
+                <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+                
+                <!-- Id Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> Id. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Id}} </td>
+                </ng-container>
+                
+                <!-- Activite Column -->
+                <ng-container matColumnDef="activite">
+                    <th mat-header-cell *matHeaderCellDef> Activité </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Activite}} </td>
+                </ng-container>
+                
+                <!-- Date Column -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Date | date : 'dd/MM/yyyy' }} </td>
+                </ng-container>
+                
+                <!-- Origine Column -->
+                <ng-container matColumnDef="origin">
+                    <th mat-header-cell *matHeaderCellDef> Origine </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Origine}} </td>
+                </ng-container>
+                
+                <!-- Quantité Column -->
+                <ng-container matColumnDef="quantite">
+                    <th mat-header-cell *matHeaderCellDef> Quantité </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Quantite}} </td>
+                </ng-container>
+                
+                <!-- Montant Column -->
+                <ng-container matColumnDef="montant">
+                    <th mat-header-cell *matHeaderCellDef> Montant </th>
+                    <td mat-cell *matCellDef="let element"> {{element.Montant | currency }} </td>
+                </ng-container>
+                
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>  </th>
+                    <td mat-cell *matCellDef="let element">
+                         <button mat-mini-fab color="primary" (click)="editBudgetLine(element)"><mat-icon>edit</mat-icon></button>
+                         <button mat-mini-fab color="primary" (click)="copyBudgetLine(element)"><mat-icon>file_copy</mat-icon></button>
+                         <button mat-mini-fab color="primary" (click)="deleteBudgetLine(element)"><mat-icon>clear</mat-icon></button>
+                    </td>
+                </ng-container> 
+                
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </mat-card>
+    </div>
+    <div fxFlex="88px">
+        <mat-card fxLayout="row" fxLayoutAlign="end center">
+            <button mat-fab color="primary" style="right: 2rem;" (click)="addBudgetLine()"><mat-icon>add</mat-icon></button>
+        </mat-card>
+    </div>
+</div>
