@@ -35,6 +35,7 @@ import { EditChantierComponent } from './edit-chantier/edit-chantier.component';
 import { EditActiviteComponent } from './edit-activite/edit-activite.component';
 import { EditBudgetComponent } from './edit-budget/edit-budget.component';
 import { EditBudgetLineComponent } from './edit-budget-line/edit-budget-line.component';
+import { SplitBudgetLineComponent } from './split-budget-line/split-budget-line.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -46,7 +47,8 @@ registerLocaleData(localeFr, 'fr');
     EditChantierComponent,
     EditActiviteComponent,
     EditBudgetComponent,
-    EditBudgetLineComponent
+    EditBudgetLineComponent,
+    SplitBudgetLineComponent
   ],
   imports: [
     BrowserModule,

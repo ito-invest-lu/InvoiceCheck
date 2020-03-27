@@ -230,15 +230,17 @@ export class InvoiceService {
   }
   
   deleteBudgetLine(line : IBudgetLine) { 
-    this.http.delete(`${url}/budget_line/${line.Id}`)
-        .subscribe(
-          res => { 
-            this.budget_lines.next(res.json());
-          },
-          error => {
-            console.error('There was an error during the request');
-            console.log(error);
-          });
+    this.chantier.pipe(take(1)).subscribe(chantier => { 
+      this.http.delete(`${url}/budget_line/${chantier.ChantierCode}/${line.Id}`)
+          .subscribe(
+            res => { 
+              this.budget_lines.next(res.json());
+            },
+            error => {
+              console.error('There was an error during the request');
+              console.log(error);
+            });
+    });
   }
   
   private handleError(error: Response) {

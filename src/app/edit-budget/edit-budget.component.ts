@@ -8,6 +8,8 @@ import { InvoiceService, IInvoice, IChantier, IBudgetLine } from '../invoice.ser
 
 import { EditBudgetLineComponent } from '../edit-budget-line/edit-budget-line.component';
 
+import { SplitBudgetLineComponent } from '../split-budget-line/split-budget-line.component';
+
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
@@ -70,7 +72,7 @@ export class EditBudgetComponent implements OnInit {
   displayChantier() {
     if(this.filterForm.get('Chantier').value) {
       this.router.navigate(['/edit', this.filterForm.get('Chantier').value]);
-      this.is.getBudgetFromServer(this.filterForm.getRawValue());
+      this.is.getBudgetFromServer(this.filterForm.get('Chantier').value);
     }
   }
   
@@ -87,6 +89,11 @@ export class EditBudgetComponent implements OnInit {
   copyBudgetLine(line : IBudgetLine) {
     this.is.copyBudgetLine(line);
     this.dialog.open(EditBudgetLineComponent);
+  }
+  
+  splitBudgetLine(line : IBudgetLine) {
+    this.is.copyBudgetLine(line);
+    this.dialog.open(SplitBudgetLineComponent);
   }
   
   deleteBudgetLine(line : IBudgetLine) {
