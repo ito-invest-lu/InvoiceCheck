@@ -75,8 +75,7 @@ export class SplitBudgetLineComponent implements OnInit {
   }
   
   onChangeActivite(line : IBudgetLine) {
-    line.Activite = this.activites.filter(a => a.ActiviteCode = line.ActiviteCode)[0].Activite;
-    console.log(line);
+    line.Activite = this.activites.find(a => a.ActiviteCode == line.ActiviteCode).Activite;
   }
 
   recomputeTotals() {

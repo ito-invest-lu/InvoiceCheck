@@ -92,7 +92,7 @@ export class EditBudgetComponent implements OnInit {
   }
   
   splitBudgetLine(line : IBudgetLine) {
-    this.is.copyBudgetLine(line);
+    this.is.loadBudgetLine(line);
     this.dialog.open(SplitBudgetLineComponent);
   }
   
