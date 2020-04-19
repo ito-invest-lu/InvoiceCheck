@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from "@angular/http";
+import { Http, Response, Headers } from "@angular/http";
 import { environment } from '../environments/environment';
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { take, map } from 'rxjs/operators';
 
 const url = environment.server;
+const db_url = environment.db_server;
+
+const httpOptions = {
+  headers: new Headers(
+    {
+      'Content-Type': 'application/json',
+      'Authorization': `Basic ` + btoa('timesheet_user:Socoma2020!'),
+    }
+  )
+};
 
 export interface IBudgetLine {
     "Id": string,
@@ -55,6 +65,17 @@ export interface IActivite {
     "Activite": string
 }
 
+export interface ITeam {
+    "Name": string,
+    "Employees" : IEmployee[]
+}
+
+export interface IEmployee {
+    "EmployeeCode": string,
+    "Employee": string,
+    "Leader": boolean
+}
+
 @Injectable({
   providedIn: 'root'
 }) 
@@ -72,6 +93,32 @@ export class InvoiceService {
   public budget_line : BehaviorSubject<IBudgetLine> = new BehaviorSubject(undefined);
 
   constructor(private http: Http) { }
+  
+  getTeams() {
+    return this.http.get(`${db_url}/timesheet/employees`,httpOptions)
+      .pipe(map(
+          res => { 
+            return <ITeam[]>res.json().teams;
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          }));
+  }
+  
+  getEmployees() {
+    return this.http.get(`${url}/employees`)
+      .pipe(map(
+          res => { 
+            return <IEmployee[]>res.json().map(item => {
+              return { EmployeeCode: item.employe_code, Employee: item.employe };
+            });
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          }));
+  }
   
   getChantiers() {
     return this.http.get(`${url}/chantiers`)

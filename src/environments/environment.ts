@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   server: 'https://dashboard-server.socomaconstruction.com',
+  db_server: 'https://couchdb.socomaconstruction.com',
 };
 
 /*
