@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BrowseInvoiceComponent } from './browse-invoice/browse-invoice.component';
 import { EditBudgetComponent } from './edit-budget/edit-budget.component';
 import { PlanComponent } from './plan/plan.component';
+import { BrowseDevisComponent } from './browse-devis/browse-devis.component';
 
 const routes: Routes = [
   { path: 'browse', component: BrowseInvoiceComponent },
@@ -10,6 +11,8 @@ const routes: Routes = [
   { path: 'edit', component: EditBudgetComponent },
   { path: 'edit/:chantier', component: EditBudgetComponent },
   { path: 'plan', component: PlanComponent },
+  { path: 'browse_devis', component: BrowseDevisComponent },
+  { path: 'devis/:company/:number', component: BrowseDevisComponent },
 ];
 
 @NgModule({

@@ -55,6 +55,13 @@ export interface IInvoicePDF {
     "PDF": string
 }
 
+export interface IDevis {
+    "Company": string,
+    "Number": string,
+    "Customer": string,
+    "PDF": string
+}
+
 export interface IChantier {
     "ChantierCode": string,
     "Chantier": string
@@ -91,6 +98,8 @@ export class InvoiceService {
   public budget_lines : BehaviorSubject<IBudgetLine[]> = new BehaviorSubject(undefined);
   
   public budget_line : BehaviorSubject<IBudgetLine> = new BehaviorSubject(undefined);
+  
+  public devis : BehaviorSubject<IDevis> = new BehaviorSubject(undefined);
 
   constructor(private http: Http) { }
   
@@ -144,6 +153,18 @@ export class InvoiceService {
           }));
   }
   
+  getDevisList(company:string, number:string) {
+    return this.http.get(`${url}/devis_number?numero=${number}&company=${company}`)
+      .pipe(map(
+          res => { 
+            return <string[]>res.json().map(item => item.Number);
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          }));
+  }
+  
   getNumberList(query:IInvoiceQuery) {
     return this.http.get(`${url}/invoice_number?numero=${query.Number}&journal=${query.Journal}&company=${query.Company}`)
       .pipe(map(
@@ -154,6 +175,18 @@ export class InvoiceService {
             console.error('There was an error during the request');
             console.log(error);
           }));
+  }
+  
+  getDevisFromServer(company:string, number:string) {
+    return this.http.get(`${url}/devis_pdfs?numero=${number}&company=${company}`)
+        .subscribe(
+          res => { 
+            this.devis.next(res.json()[0]);
+          },
+          error => {
+            console.error('There was an error during the request');
+            console.log(error);
+          });
   }
   
   getInvoiceFromServer(query:IInvoiceQuery) {

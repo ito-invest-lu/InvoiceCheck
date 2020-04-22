@@ -37,6 +37,7 @@ import { EditBudgetComponent } from './edit-budget/edit-budget.component';
 import { EditBudgetLineComponent } from './edit-budget-line/edit-budget-line.component';
 import { SplitBudgetLineComponent } from './split-budget-line/split-budget-line.component';
 import { PlanComponent } from './plan/plan.component';
+import { BrowseDevisComponent } from './browse-devis/browse-devis.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -50,7 +51,8 @@ registerLocaleData(localeFr, 'fr');
     EditBudgetComponent,
     EditBudgetLineComponent,
     SplitBudgetLineComponent,
-    PlanComponent
+    PlanComponent,
+    BrowseDevisComponent
   ],
   imports: [
     BrowserModule,
