@@ -1,0 +1,39 @@
+<mat-card name="invoiceFilter">
+    <form [formGroup]="filterForm" novalidate >
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="left center">
+            <div fxFlexOffset="20px">
+                <mat-form-field class="full-width">
+                    <mat-label>Société</mat-label>
+                    <mat-select matNativeControl required formControlName="Company" name="company">
+                        <mat-option value="001">Socoma</mat-option>
+                        <mat-option value="100">Ross 128</mat-option>
+                        <mat-option value="200">Imply</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxFlexOffset="20px">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Numéro" formControlName="Number" [matAutocomplete]="autoNumber">
+                    <mat-autocomplete #autoNumber="matAutocomplete">
+                        <mat-option *ngFor="let number of filteredNumbers | async" [value]="number">
+                        {{number}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div fxFlexOffset="20px">
+                <button mat-raised-button color="primary" (click)="displayDevis()">Afficher</button>
+            </div>
+        </div>
+    </form>
+</mat-card>
+<!--<mat-card name="devisInfo" *ngIf="devis">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="left center">
+        <div fxFlexOffset="20px">
+            {{devis.Number}}
+        </div>
+    </div>
+</mat-card>-->
+<mat-card name="pdfDisplay" *ngIf="pdf">
+    <ngx-extended-pdf-viewer [src]="pdf" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
+</mat-card>
