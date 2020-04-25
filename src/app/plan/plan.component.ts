@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { InvoiceService, IActivite, IChantier, IEmployee, ITeam} from '../invoice.service';
+import { SmartsheetService, IEmployee, ITeam } from '../smartsheet.service';
 
-import { SmartsheetService } from '../smartsheet.service';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-plan',
@@ -12,11 +13,14 @@ import { SmartsheetService } from '../smartsheet.service';
 export class PlanComponent implements OnInit {
 
   teams : ITeam[];
+  
+  days : any[];
 
-  constructor(private is : InvoiceService, private sm : SmartsheetService) { }
+  constructor(private sm : SmartsheetService) { }
 
   ngOnInit(): void {
-    this.is.getTeams().subscribe(val => this.teams = val);
+    this.sm.getTeams().subscribe(val => this.teams = val);
+    this.days = [moment()];
   }
 
 }

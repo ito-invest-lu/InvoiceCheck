@@ -1,10 +1,44 @@
-<mat-list>
-	<ng-container *ngFor="let t of teams">
-		<mat-list-item class="team">{{t.Name}}</mat-list-item>
-		<mat-list class="employee">
-			<div *ngFor="let e of t.Employees">
-				<mat-list-item>{{ e.Employee }} ({{ e.EmployeeCode }})</mat-list-item>
+<div class="container" fxLayout="row" fxHide.lt-sm >
+	<div fxFlexOffset="400px" fxFlex  class="item">
+		21/04
+	</div>
+	<div fxFlex class="item">
+		22/04
+	</div>
+	<div fxFlex class="item">
+		23/04
+	</div>
+	<div fxFlex class="item">
+		24/04
+	</div>
+	<div fxFlex class="item">
+		25/04
+	</div>
+</div>
+<div class="container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center" *ngFor="let t of teams">
+	<div fxFlex="45px" class="team">
+		{{t.Name}}
+	</div>
+	<div fxFlex class="team-list">
+		<div class="container" fxLayout="row" fxLayoutAlign="center center" *ngFor="let e of t.Employees">
+			<div fxFlex="300px" class="employee">
+				{{ e.Employee }} ({{ e.EmployeeCode }})
 			</div>
-		</mat-list>
-	</ng-container>
-</mat-list>
+			<div fxFlex class="item">
+				<button mat-raised-button color="primary">Chantier</button>
+			</div>
+			<div fxFlex class="item">
+				<button mat-raised-button color="primary">Chantier</button>
+			</div>
+			<div fxFlex class="item">
+				<button mat-raised-button color="primary">Chantier</button>
+			</div>
+			<div fxFlex class="item">
+				<button mat-raised-button color="primary">Chantier</button>
+			</div>
+			<div fxFlex class="item">
+				<button mat-raised-button color="primary">Chantier</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -3,6 +3,7 @@ import { NgModule, DEFAULT_CURRENCY_CODE, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,6 +28,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -38,6 +40,7 @@ import { EditBudgetLineComponent } from './edit-budget-line/edit-budget-line.com
 import { SplitBudgetLineComponent } from './split-budget-line/split-budget-line.component';
 import { PlanComponent } from './plan/plan.component';
 import { BrowseDevisComponent } from './browse-devis/browse-devis.component';
+import { SelectTaskComponent } from './select-task/select-task.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -52,12 +55,14 @@ registerLocaleData(localeFr, 'fr');
     EditBudgetLineComponent,
     SplitBudgetLineComponent,
     PlanComponent,
-    BrowseDevisComponent
+    BrowseDevisComponent,
+    SelectTaskComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
+    HttpClientModule,
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -78,7 +83,8 @@ registerLocaleData(localeFr, 'fr');
     ReactiveFormsModule,
     NgxExtendedPdfViewerModule,
     FlexLayoutModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatGridListModule,
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'fr-BE' },
