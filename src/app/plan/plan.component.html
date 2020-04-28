@@ -1,44 +1,55 @@
-<div class="container" fxLayout="row" fxHide.lt-sm >
-	<div fxFlexOffset="400px" fxFlex  class="item">
-		21/04
+<div fxHide.lt-sm >
+	<div class="container" fxLayout="row" fxFlexFill >
+		<div fxFlex="195px" class="action">
+			<button mat-raised-button color="accent" (click)="sm.previousDay()" style="width:100%;"><<<</button>
+		</div>
+		<div fxFlex="195px" class="action">
+			<button mat-raised-button color="accent" (click)="sm.nextDay()" style="width:100%;">>>></button>
+		</div>
+		<div fxFlex  class="day">
+			{{dates[0].format('DD/MM')}}
+		</div>
+		<div fxFlex class="day">
+			{{dates[1].format('DD/MM')}}
+		</div>
+		<div fxFlex class="day">
+			{{dates[2].format('DD/MM')}}
+		</div>
+		<div fxFlex class="day">
+			{{dates[3].format('DD/MM')}}
+		</div>
+		<div fxFlex class="day" style="margin-right:15px;">
+			{{dates[4].format('DD/MM')}}
+		</div>
 	</div>
-	<div fxFlex class="item">
-		22/04
-	</div>
-	<div fxFlex class="item">
-		23/04
-	</div>
-	<div fxFlex class="item">
-		24/04
-	</div>
-	<div fxFlex class="item">
-		25/04
-	</div>
-</div>
-<div class="container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center" *ngFor="let t of teams">
-	<div fxFlex="45px" class="team">
-		{{t.Name}}
-	</div>
-	<div fxFlex class="team-list">
-		<div class="container" fxLayout="row" fxLayoutAlign="center center" *ngFor="let e of t.Employees">
-			<div fxFlex="300px" class="employee">
-				{{ e.Employee }} ({{ e.EmployeeCode }})
-			</div>
-			<div fxFlex class="item">
-				<button mat-raised-button color="primary">Chantier</button>
-			</div>
-			<div fxFlex class="item">
-				<button mat-raised-button color="primary">Chantier</button>
-			</div>
-			<div fxFlex class="item">
-				<button mat-raised-button color="primary">Chantier</button>
-			</div>
-			<div fxFlex class="item">
-				<button mat-raised-button color="primary">Chantier</button>
-			</div>
-			<div fxFlex class="item">
-				<button mat-raised-button color="primary">Chantier</button>
+	<div class="container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center" *ngFor="let t of teams">
+		<div fxFlex="45px" class="team">
+			{{t.Name}}
+		</div>
+		<div fxFlex class="team-list">
+			<div class="container" fxLayout="row" fxLayoutAlign="center center" *ngFor="let e of t.Employees">
+				<div fxFlex="300px" class="employee">
+					{{ e.Employee }} ({{ e.EmployeeCode }})
+				</div>
+				<div fxFlex class="item">
+					<app-plan-cell [employee]="e" index="0" ></app-plan-cell>
+				</div>
+				<div fxFlex class="item">
+					<app-plan-cell [employee]="e" index="1" ></app-plan-cell>
+				</div>
+				<div fxFlex class="item">
+					<app-plan-cell [employee]="e" index="2" ></app-plan-cell>
+				</div>
+				<div fxFlex class="item">
+					<app-plan-cell [employee]="e" index="3" ></app-plan-cell>
+				</div>
+				<div fxFlex class="item">
+					<app-plan-cell [employee]="e" index="4" ></app-plan-cell>
+				</div>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="container" fxLayout="row" fxHide.gt-xs >
+	TODO : Implement mobile view of the planning....
 </div>

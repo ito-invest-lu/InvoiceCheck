@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { SmartsheetService, ITask } from '../smartsheet.service';
 
@@ -13,12 +13,20 @@ export class SelectTaskComponent implements OnInit {
 
   tasks : ITask[];
 
+  selectedTask : string;
+
   constructor(public dialogRef: MatDialogRef<SelectTaskComponent>, private sm : SmartsheetService) { }
 
   ngOnInit(): void {
-    /**this.afterOpened().subscribe(function(){
-      this.sm.getTaskList().subscribe(val => this.tasks = val);
-    });**/
-  } 
+    this.sm.tasks.subscribe(val => this.tasks = val);
+  }
+  
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  
+  onOkClick(): void {
+    this.dialogRef.close(this.tasks.filter(t => t.TaskId == this.selectedTask)[0]);
+  }
 
 }

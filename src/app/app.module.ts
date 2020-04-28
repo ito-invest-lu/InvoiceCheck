@@ -41,6 +41,7 @@ import { SplitBudgetLineComponent } from './split-budget-line/split-budget-line.
 import { PlanComponent } from './plan/plan.component';
 import { BrowseDevisComponent } from './browse-devis/browse-devis.component';
 import { SelectTaskComponent } from './select-task/select-task.component';
+import { PlanCellComponent } from './plan-cell/plan-cell.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -56,7 +57,8 @@ registerLocaleData(localeFr, 'fr');
     SplitBudgetLineComponent,
     PlanComponent,
     BrowseDevisComponent,
-    SelectTaskComponent
+    SelectTaskComponent,
+    PlanCellComponent
   ],
   imports: [
     BrowserModule,

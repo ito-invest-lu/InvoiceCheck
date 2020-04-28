@@ -1,0 +1,61 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Observable } from "rxjs/Observable";
+import { filter, map } from 'rxjs/operators';
+
+import { SmartsheetService, IEmployee, IAssignation, ITask } from '../smartsheet.service';
+
+import { SelectTaskComponent } from '../select-task/select-task.component';
+
+import { Moment } from 'moment';
+import * as moment from 'moment';
+
+@Component({
+  selector: 'app-plan-cell',
+  templateUrl: './plan-cell.component.html',
+  styleUrls: ['./plan-cell.component.css']
+})
+export class PlanCellComponent implements OnInit {
+
+  @Input() public employee : IEmployee;
+  @Input() public index : number;
+  
+  public date : Moment;
+  
+  public assignation : IAssignation;
+  
+  constructor(private sm : SmartsheetService, public dialog: MatDialog) {  }
+
+  ngOnInit() {
+    this.sm.dates.pipe(map(t => t[this.index])).subscribe(val => this.date = val);
+    this.sm.assignations.pipe(filter(assignation => assignation && assignation.Employee.EmployeeCode == this.employee.EmployeeCode && assignation.Date == this.date.format('YYYY-MM-DD'))).subscribe(val => this.assignation = val);
+    this.sm.resetPlanning.subscribe(
+      val => this.assignation = undefined
+    );
+  }
+
+  AssignTask() {
+    let dialogRef = this.dialog.open(SelectTaskComponent, {
+      height: '800px',
+      width: '600px',
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        if(this.assignation) {
+          this.assignation.Task = result;
+          this.sm.updateAssignation(this.assignation);
+        } else {
+          console.log(result);
+          this.sm.addAssignation(
+            this.employee, 
+            this.date, 
+            result
+          );
+        }
+      }
+    });
+  }
+
+}

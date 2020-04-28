@@ -1,1 +1,9 @@
-<p>select-task works!</p>
+<div mat-dialog-content>
+    <mat-radio-group aria-label="Select an option" class="select-task-radio-group" [(ngModel)]="selectedTask">
+      <mat-radio-button class="select-task-radio-button" *ngFor="let t of tasks" value="{{ t.TaskId }}">{{ t.Chantier }} - {{ t.Name }}</mat-radio-button>
+    </mat-radio-group>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="onOkClick()" color="primary">Ok</button>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+</div>

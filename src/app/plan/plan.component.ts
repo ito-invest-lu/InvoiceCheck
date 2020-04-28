@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import { interval, of } from 'rxjs';
+import { Observable } from "rxjs/Observable";
+import { map } from 'rxjs/operators';
+
 import { SmartsheetService, IEmployee, ITeam } from '../smartsheet.service';
 
 import { Moment } from 'moment';
@@ -14,13 +18,19 @@ export class PlanComponent implements OnInit {
 
   teams : ITeam[];
   
-  days : any[];
+  dates : Moment[];
 
-  constructor(private sm : SmartsheetService) { }
+  constructor(public sm : SmartsheetService) { }
 
   ngOnInit(): void {
     this.sm.getTeams().subscribe(val => this.teams = val);
-    this.days = [moment()];
+
+    this.sm.resetDates();
+    interval(9000000).subscribe(t => this.sm.resetDates());
+    
+    this.sm.refreshPlanning();
+    
+    this.sm.dates.subscribe(val => this.dates = val);
   }
 
 }
