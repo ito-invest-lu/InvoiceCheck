@@ -115,7 +115,7 @@ export class SmartsheetService {
     this.planning_db = new PouchDB('planning');
     let remote_planning_db = new PouchDB(`${db_url}/planning`, {skip_setup: true});
     remote_planning_db.logIn('timesheet_user','Socoma2020!');
-    this.planning_db.sync(remote_planning_db, {live: true, retry: true, /* other sync options */});
+    this.planning_db.sync(remote_planning_db, {live: true, retry: true, /* other sync options */}).on('error', console.log.bind(console));
     
     let bindvar = this;
     

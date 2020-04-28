@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable } from "rxjs/Observable";
@@ -23,23 +23,30 @@ export class PlanCellComponent implements OnInit {
   
   public date : Moment;
   
-  public assignation : IAssignation;
+  public assignation : IAssignation
   
-  constructor(private sm : SmartsheetService, public dialog: MatDialog) {  }
+  constructor(private sm : SmartsheetService, public dialog: MatDialog, private cdr: ChangeDetectorRef) {  }
 
   ngOnInit() {
     this.sm.dates.pipe(map(t => t[this.index])).subscribe(val => this.date = val);
-    this.sm.assignations.pipe(filter(assignation => assignation && assignation.Employee.EmployeeCode == this.employee.EmployeeCode && assignation.Date == this.date.format('YYYY-MM-DD'))).subscribe(val => this.assignation = val);
+    this.sm.assignations.pipe(filter(assignation => assignation && assignation.Employee == this.employee && assignation.Date == this.date.format('YYYY-MM-DD'))).subscribe(val => this.assignation = val);
+    this.sm.dates.pipe(map(t => t[this.index])).subscribe(val => this.date = val);
+    this.sm.assignations.pipe(
+        filter(assignation => 
+          assignation && 
+          assignation.Employee.EmployeeCode == this.employee.EmployeeCode && 
+          assignation.Date == this.date.format('YYYY-MM-DD')))
+        .subscribe(val => {
+          this.assignation = val;
+          this.cdr.detectChanges();
+        });
     this.sm.resetPlanning.subscribe(
       val => this.assignation = undefined
     );
   }
 
   AssignTask() {
-    let dialogRef = this.dialog.open(SelectTaskComponent, {
-      height: '800px',
-      width: '600px',
-    });
+    let dialogRef = this.dialog.open(SelectTaskComponent, { });
     
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
@@ -47,7 +54,6 @@ export class PlanCellComponent implements OnInit {
           this.assignation.Task = result;
           this.sm.updateAssignation(this.assignation);
         } else {
-          console.log(result);
           this.sm.addAssignation(
             this.employee, 
             this.date, 
