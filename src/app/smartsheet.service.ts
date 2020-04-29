@@ -61,6 +61,7 @@ export interface ITask {
   TaskId : string,
   Name : string,
   Chantier : string,
+  Color : string,
 };
 
 export interface IAssignation {
@@ -148,21 +149,25 @@ export class SmartsheetService {
   }
   
   refreshTaskList() {
+    let binvar = this;
     this.http.get<SmarsheetReportResponse>(`${smartsheet_url}/reports/5332129069459332`,httpOptions)
       .pipe(map(
           res => { 
             let tasks : ITask[] = [];
+            //https://timesheet_user:Socoma2020!@couchdb.socomaconstruction.com/planning/_design/ass_by_task/_view/ass_by_task_view?group=true
             res.rows.forEach(function(row) {
               tasks.push({
                 TaskId : row.cells[1].value,
                 Name : row.cells[2].value,
                 Chantier : row.cells[3].value,
+                Color : binvar.hex(row.cells[1].value),
               })
             })
             tasks.push({
                 TaskId : 'task_none',
                 Name : 'Absent',
                 Chantier : 'Absent',
+                Color : '#aaaa',
             });
             return tasks;
           },
@@ -224,4 +229,122 @@ export class SmartsheetService {
       }
     );
   }
+  
+  
+  hash(input : string) {
+    let seed = 131;
+    let seed2 = 137;
+    let hash = 0;
+    // make hash more sensitive for short string like 'a', 'b', 'c'
+    input += 'x';
+    // Note: Number.MAX_SAFE_INTEGER equals 9007199254740991
+    let MAX_SAFE_INTEGER = 9007199254740991 / seed2;
+    for(let i = 0; i < input.length; i++) {
+        if(hash > MAX_SAFE_INTEGER) {
+            hash = hash / seed2;
+        }
+        hash = hash * seed + input.charCodeAt(i);
+    }
+    return hash;
+  }
+  
+  private hueRanges = { min : 0, max : 360};
+  
+  /**
+   * Returns the hash in [h, s, l].
+   * Note that H ∈ [0, 360); S ∈ [0, 1]; L ∈ [0, 1];
+   *
+   * @param {String} str string to hash
+   * @returns {Array} [h, s, l]
+   */
+  hsl(str : string) : Array<number> {
+      var H, S, L;
+      var hash = this.hash(str);
+  
+      H = hash % 359;
+      hash = (hash / 360);
+      S = 0.5;
+      L = 0.5;
+  
+      return [H, S, L];
+  }
+  
+  /**
+   * Returns the hash in [r, g, b].
+   * Note that R, G, B ∈ [0, 255]
+   *
+   * @param {String} str string to hash
+   * @returns {Array} [r, g, b]
+   */
+  rgb(str : string) {
+      var hsl = this.hsl(str);
+      return this.HSL2RGB(hsl);
+  };
+  
+  /**
+   * Returns the hash in hex
+   *
+   * @param {String} str string to hash
+   * @returns {String} hex with #
+   */
+  hex(str : string) {
+      var rgb = this.rgb(str);
+      return this.RGB2HEX(rgb);
+  };
+  
+  /**
+   * Convert RGB Array to HEX
+   *
+   * @param {Array} RGBArray - [R, G, B]
+   * @returns {String} 6 digits hex starting with #
+   */
+  RGB2HEX(RGBArray : Array<number>) {
+      var hex = '#';
+      RGBArray.forEach(function(value) {
+          if (value < 16) {
+              hex += 0;
+          }
+          hex += value.toString(16);
+      });
+      return hex;
+  };
+  
+  /**
+   * Convert HSL to RGB
+   *
+   * @see {@link http://zh.wikipedia.org/wiki/HSL和HSV色彩空间} for further information.
+   * @param {Number} H Hue ∈ [0, 360)
+   * @param {Number} S Saturation ∈ [0, 1]
+   * @param {Number} L Lightness ∈ [0, 1]
+   * @returns {Array} R, G, B ∈ [0, 255]
+   */
+   HSL2RGB(HSL : Array<number>) : Array<number> {
+      let H = HSL[0];
+      let S = HSL[1];
+      let L = HSL[2];
+      H /= 360;
+  
+      var q = L < 0.5 ? L * (1 + S) : L + S - L * S;
+      var p = 2 * L - q;
+  
+      return [H + 1/3, H, H - 1/3].map(function(color) {
+          if(color < 0) {
+              color++;
+          }
+          if(color > 1) {
+              color--;
+          }
+          if(color < 1/6) {
+              color = p + (q - p) * 6 * color;
+          } else if(color < 0.5) {
+              color = q;
+          } else if(color < 2/3) {
+              color = p + (q - p) * 6 * (2/3 - color);
+          } else {
+              color = p;
+          }
+          return Math.round(color * 255);
+      });
+  };
+  
 }

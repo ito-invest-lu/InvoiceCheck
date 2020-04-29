@@ -21,6 +21,8 @@ export class PlanCellComponent implements OnInit {
   @Input() public employee : IEmployee;
   @Input() public index : number;
   
+  private cellId : string;
+  
   public date : Moment;
   
   public assignation : IAssignation
@@ -28,14 +30,14 @@ export class PlanCellComponent implements OnInit {
   constructor(private sm : SmartsheetService, public dialog: MatDialog, private cdr: ChangeDetectorRef) {  }
 
   ngOnInit() {
-    this.sm.dates.pipe(map(t => t[this.index])).subscribe(val => this.date = val);
+    this.sm.dates.pipe(map(t => t[this.index])).subscribe(val =>{
+      this.date = val;
+      this.cellId = val.format("YYYY-MM-DD-")+this.employee.EmployeeCode;
+    });
     this.sm.assignations.pipe(filter(assignation => assignation && assignation.Employee == this.employee && assignation.Date == this.date.format('YYYY-MM-DD'))).subscribe(val => this.assignation = val);
     this.sm.dates.pipe(map(t => t[this.index])).subscribe(val => this.date = val);
     this.sm.assignations.pipe(
-        filter(assignation => 
-          assignation && 
-          assignation.Employee.EmployeeCode == this.employee.EmployeeCode && 
-          assignation.Date == this.date.format('YYYY-MM-DD')))
+        filter(assignation => assignation && assignation._id === this.cellId))
         .subscribe(val => {
           this.assignation = val;
           this.cdr.detectChanges();
