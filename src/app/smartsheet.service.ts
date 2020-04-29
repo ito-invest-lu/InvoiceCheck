@@ -172,7 +172,7 @@ export class SmartsheetService {
                   TaskId : row.cells[1].value,
                   Name : row.cells[2].value,
                   Chantier : row.cells[3].value,
-                  Color : binvar.hex(row.cells[3].value),
+                  Color : binvar.hex(row.cells[3].value+row.cells[2].value),
                   Budget : parseInt(row.cells[4].value),
                   Usage : usages.get(row.cells[1].value) || 0,
                 })
