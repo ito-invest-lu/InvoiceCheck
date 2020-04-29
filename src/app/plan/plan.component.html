@@ -1,25 +1,28 @@
 <div fxHide.lt-sm >
 	<div class="container" fxLayout="row" fxFlexFill >
-		<div fxFlex="195px" class="action">
+		<div fxFlex="80px" class="action">
+			<button mat-raised-button color="accent" (click)="sm.refreshTaskList()" style="width:100%;"><mat-icon>refresh</mat-icon></button>
+		</div>
+		<div fxFlex="155px" class="action">
 			<button mat-raised-button color="accent" (click)="sm.previousDay()" style="width:100%;"><<<</button>
 		</div>
-		<div fxFlex="195px" class="action">
+		<div fxFlex="155px" class="action">
 			<button mat-raised-button color="accent" (click)="sm.nextDay()" style="width:100%;">>>></button>
 		</div>
 		<div fxFlex  class="day">
-			{{dates[0].format('DD/MM')}}
+			{{dates[0].format('ddd DD/MM')}} <button mat-button-raised (click)="copyNext(0)" color="primary">></button>
 		</div>
 		<div fxFlex class="day">
-			{{dates[1].format('DD/MM')}}
+			{{dates[1].format('ddd DD/MM')}}
 		</div>
 		<div fxFlex class="day">
-			{{dates[2].format('DD/MM')}}
+			{{dates[2].format('ddd DD/MM')}}
 		</div>
 		<div fxFlex class="day">
-			{{dates[3].format('DD/MM')}}
+			{{dates[3].format('ddd DD/MM')}}
 		</div>
 		<div fxFlex class="day" style="margin-right:15px;">
-			{{dates[4].format('DD/MM')}}
+			{{dates[4].format('ddd DD/MM')}}
 		</div>
 	</div>
 	<div class="container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center" *ngFor="let t of teams">

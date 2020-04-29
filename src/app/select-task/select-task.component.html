@@ -1,6 +1,11 @@
 <div mat-dialog-content>
     <mat-radio-group aria-label="Select an option" class="select-task-radio-group" [(ngModel)]="selectedTask">
-      <mat-radio-button class="select-task-radio-button" *ngFor="let t of tasks" value="{{ t.TaskId }}">{{ t.Chantier }} - {{ t.Name }}</mat-radio-button>
+        <table>
+        <tr *ngFor="let t of tasks">
+            <td><mat-radio-button class="select-task-radio-button" value="{{ t.TaskId }}">{{ t.Chantier }} - {{ t.Name }}</mat-radio-button></td>
+            <td><button mat-raised-button>{{ t.Usage }} / {{ t.Budget }}</button></td>
+        </tr>
+        </table>
     </mat-radio-group>
 </div>
 <div mat-dialog-actions>

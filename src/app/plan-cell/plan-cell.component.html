@@ -1,2 +1,2 @@
-<button mat-raised-button color="secondary" (click)='AssignTask()' *ngIf='!assignation'>Assigne...</button>
-<button mat-raised-button [style.background-color]="assignation.Task.Color" (click)='AssignTask()' *ngIf='assignation' >{{ assignation.Task.Chantier }}</button>
+<div class="cell" color="secondary" (click)='AssignTask()' *ngIf='!assignation'>Assigne...</div>
+<div class="cell" [style.background-color]="assignation.Task.Color" (click)='AssignTask()' *ngIf='assignation' >{{ assignation.Task.Chantier }}</div>

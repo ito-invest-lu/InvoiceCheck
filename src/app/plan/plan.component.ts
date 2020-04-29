@@ -32,5 +32,8 @@ export class PlanComponent implements OnInit {
     
     this.sm.dates.subscribe(val => this.dates = val);
   }
-
+  
+  copyNext(index : number) {
+    this.sm.copyDay(this.dates[index], this.dates[index+1]);
+  } 
 }

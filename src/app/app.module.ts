@@ -29,6 +29,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -87,6 +88,7 @@ registerLocaleData(localeFr, 'fr');
     FlexLayoutModule,
     AppRoutingModule,
     MatGridListModule,
+    MatProgressBarModule,
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'fr-BE' },

@@ -8,6 +8,8 @@ import { take, map } from 'rxjs/operators';
 import { Moment } from 'moment';
 import * as moment from 'moment';
 
+moment.locale('fr');
+
 import PouchDB from 'pouchdb';
 import PouchAuth from 'pouchdb-authentication';
 
@@ -62,6 +64,8 @@ export interface ITask {
   Name : string,
   Chantier : string,
   Color : string,
+  Budget : number,
+  Usage : number,
 };
 
 export interface IAssignation {
@@ -150,46 +154,83 @@ export class SmartsheetService {
   
   refreshTaskList() {
     let binvar = this;
-    this.http.get<SmarsheetReportResponse>(`${smartsheet_url}/reports/5332129069459332`,httpOptions)
-      .pipe(map(
-          res => { 
-            let tasks : ITask[] = [];
-            //https://timesheet_user:Socoma2020!@couchdb.socomaconstruction.com/planning/_design/ass_by_task/_view/ass_by_task_view?group=true
-            res.rows.forEach(function(row) {
-              tasks.push({
-                TaskId : row.cells[1].value,
-                Name : row.cells[2].value,
-                Chantier : row.cells[3].value,
-                Color : binvar.hex(row.cells[1].value),
+    let usages = new Map<string, number>();
+    this.planning_db.query('task/count',{group: true})
+    .then(function (res) {
+        let usages = new Map<string, number>();
+        res.rows.map(
+          row => usages.set(row.key, row.value)
+        );
+        return usages;
+    }).then(function (usages : Map<string, number>) {
+      binvar.http.get<SmarsheetReportResponse>(`${smartsheet_url}/reports/5332129069459332`,httpOptions)
+        .pipe(map(
+            res => { 
+              let tasks : ITask[] = [];
+              res.rows.forEach(function(row) {
+                tasks.push({
+                  TaskId : row.cells[1].value,
+                  Name : row.cells[2].value,
+                  Chantier : row.cells[3].value,
+                  Color : binvar.hex(row.cells[3].value),
+                  Budget : parseInt(row.cells[4].value),
+                  Usage : usages.get(row.cells[1].value) || 0,
+                })
               })
+              tasks.push({
+                  TaskId : 'task_none',
+                  Name : 'Absent',
+                  Chantier : 'Absent',
+                  Color : '#aaaa',
+                  Budget : 0,
+                  Usage : 0,
+              });
+              return tasks;
+            },
+            error => {
+              console.error('There was an error during the request');
+              console.log(error);
             })
-            tasks.push({
-                TaskId : 'task_none',
-                Name : 'Absent',
-                Chantier : 'Absent',
-                Color : '#aaaa',
-            });
-            return tasks;
-          },
-          error => {
-            console.error('There was an error during the request');
-            console.log(error);
-          })
-      ).subscribe(val => this.tasks.next(val));
+        ).subscribe(val => binvar.tasks.next(val));
+    }).catch(function (err) {
+        console.log(err);
+    });
   };
   
+  addWeekdays(date : Moment, days : number) {
+    while (days > 0) {
+      date = date.add(1, 'days');
+      // decrease "days" only if it's a weekday.
+      if (date.isoWeekday() !== 6 && date.isoWeekday() !== 7) {
+        days -= 1;
+      }
+    }
+    return date;
+  }
+  
+  substractWeekdays(date : Moment, days : number) {
+    while (days < 0) {
+      date = date.add(-1, 'days');
+      // decrease "days" only if it's a weekday.
+      if (date.isoWeekday() !== 6 && date.isoWeekday() !== 7) {
+        days += 1;
+      }
+    }
+    return date;
+  }
+  
   resetDates() {
-    this.dates.next([0,1,2,3,4].map(t => moment().add(t, 'days')));
+    this.dates.next([0,1,2,3,4].map(t => this.addWeekdays(moment(), t)));
     this.refreshPlanning();
   }
 
   nextDay() {
-    this.dates.next(this.dates.value.map(t => t.add(1, 'days')));
+    this.dates.next(this.dates.value.map(t => this.addWeekdays(t, 1)));
     this.refreshPlanning();
   }
   
   previousDay() {
-    this.dates.next(this.dates.value.map(t => t.add(-1, 'days')));
+    this.dates.next(this.dates.value.map(t => this.substractWeekdays(t, -1)));
     this.refreshPlanning();
   }
   
@@ -214,6 +255,7 @@ export class SmartsheetService {
         console.log("insert:", err, body);
       }
     });
+    this.refreshTaskList();
   }
   
   addAssignation(employee : IEmployee, date : Moment, task : ITask) {
@@ -224,12 +266,34 @@ export class SmartsheetService {
         "Date": date.format('YYYY-MM-DD')
     }, function (err, body) {
         if(err) {
-          console.log("insert:", err, body);
+          console.log("Failed insert:", err, body);
         }
       }
     );
+    this.refreshTaskList();
   }
   
+  copyDay(from : Moment, to : Moment) {
+    let bindvar = this;
+    this.planning_db.query('assignement/by_date',{key : from.format('YYYY-MM-DD') , include_docs: true})
+    .then(function (res) {
+      res.rows.map(entry => {
+        bindvar.planning_db.put({
+            "_id": to.format('YYYY-MM-DD') + '-' + entry.doc.Employee.EmployeeCode, 
+            "Task": entry.doc.Task, 
+            "Employee": entry.doc.Employee, 
+            "Date": to.format('YYYY-MM-DD')
+        }, function (err, body) {
+            if(err) {
+              console.log("Failed insert:", err, body);
+            }
+          }
+        );
+      })
+    }).catch(function (err) {
+      console.log(err);
+    });
+  }
   
   hash(input : string) {
     let seed = 131;
