@@ -1,2 +1,7 @@
 <div class="cell" color="secondary" (click)='AssignTask()' *ngIf='!assignation'>Assigne...</div>
-<div class="cell" [style.background-color]="assignation.Task.Color" (click)='AssignTask()' *ngIf='assignation' >{{ assignation.Task.Chantier }}</div>
+<div class="cell" [style.background-color]="assignation.Task.Color" (click)='AssignTask()' *ngIf='assignation'>
+    <div fxLayout="row" fxFlexFill matTooltip="{{ assignation.Task.Name }}">
+        <div fxFlex>{{ assignation.Task.Chantier }}</div>
+        <!--<div fxFlex="20px"><mat-icon style='color : red;' *ngIf='assignation.Task.Budget < assignation.Task.Usage'>warning</mat-icon></div>-->
+    </div>
+</div>

@@ -195,8 +195,29 @@ export class SmartsheetService {
     }).catch(function (err) {
         console.log(err);
     });
-  };
-  
+  }
+
+  fixTaskColor () {
+    let binvar = this;
+    this.planning_db.allDocs({
+      include_docs: true,
+      attachments: true
+    }).then(function (result) {
+      result.rows.map(val => {
+        let item : IAssignation = val.doc;
+        item.Task.Color = binvar.hex(item.Task.Chantier+item.Task.Name);
+        binvar.planning_db.put(item,function (err, body) {
+          if(err) {
+            console.log("insert:", err, body);
+          }
+        });
+      });
+      binvar.refreshTaskList();
+    }).catch(function (err) {
+      console.log(err);
+    });
+  }
+
   addWeekdays(date : Moment, days : number) {
     while (days > 0) {
       date = date.add(1, 'days');

@@ -48,7 +48,7 @@ export class PlanCellComponent implements OnInit {
   }
 
   AssignTask() {
-    let dialogRef = this.dialog.open(SelectTaskComponent, { });
+    let dialogRef = this.dialog.open(SelectTaskComponent, { data: { task_id : this.assignation?.Task.TaskId }, });
     
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
