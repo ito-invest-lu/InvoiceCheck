@@ -241,7 +241,21 @@ export class SmartsheetService {
   }
   
   resetDates() {
-    this.dates.next([0,1,2,3,4].map(t => this.addWeekdays(moment(), t)));
+    let today = moment();
+    switch(today.isoWeekday()) { 
+       case 6: { 
+          this.dates.next([0,1,2,3,4].map(t => this.addWeekdays(moment().add(2, 'days'), t)));
+          break; 
+       } 
+       case 7: { 
+          this.dates.next([0,1,2,3,4].map(t => this.addWeekdays(moment().add(1, 'days'), t)));
+          break; 
+       } 
+       default: { 
+          this.dates.next([0,1,2,3,4].map(t => this.addWeekdays(moment(), t)));
+          break; 
+       } 
+    }
     this.refreshPlanning();
   }
 

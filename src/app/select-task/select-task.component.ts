@@ -14,12 +14,24 @@ export class SelectTaskComponent implements OnInit {
   tasks : ITask[];
 
   selectedTask : string;
+  
+  editMode : boolean = true;
+
+  activeTask : ITask;
 
   constructor(public dialogRef: MatDialogRef<SelectTaskComponent>, private sm : SmartsheetService, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
-    this.sm.tasks.subscribe(val => this.tasks = val);
     this.selectedTask = this.data?.task_id;
+    if(this.selectedTask) {
+      this.editMode = false;
+    } else {
+      this.editMode = true;
+    }
+    this.sm.tasks.subscribe(val => {
+      this.tasks = val;
+      this.activeTask = this.tasks.filter(t => t.TaskId == this.selectedTask)[0];
+    });
   }
   
   onNoClick(): void {
@@ -28,6 +40,10 @@ export class SelectTaskComponent implements OnInit {
   
   onOkClick(): void {
     this.dialogRef.close(this.tasks.filter(t => t.TaskId == this.selectedTask)[0]);
+  }
+  
+  onEditClick(): void {
+    this.editMode = true;
   }
 
 }
