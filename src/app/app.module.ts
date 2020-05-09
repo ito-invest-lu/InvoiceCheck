@@ -44,6 +44,7 @@ import { PlanComponent } from './plan/plan.component';
 import { BrowseDevisComponent } from './browse-devis/browse-devis.component';
 import { SelectTaskComponent } from './select-task/select-task.component';
 import { PlanCellComponent } from './plan-cell/plan-cell.component';
+import { DbLogComponent } from './db-log/db-log.component';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -60,7 +61,8 @@ registerLocaleData(localeFr, 'fr');
     PlanComponent,
     BrowseDevisComponent,
     SelectTaskComponent,
-    PlanCellComponent
+    PlanCellComponent,
+    DbLogComponent
   ],
   imports: [
     BrowserModule,

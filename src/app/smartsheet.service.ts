@@ -103,6 +103,8 @@ export class SmartsheetService {
   
   planning_db : any;
   
+  public log : EventEmitter<any> = new EventEmitter();
+  
   public dates : BehaviorSubject<Moment[]> = new BehaviorSubject(undefined);
   
   public tasks : BehaviorSubject<ITask[]> = new BehaviorSubject(undefined);
@@ -112,6 +114,9 @@ export class SmartsheetService {
   public resetPlanning : EventEmitter<any> = new EventEmitter();
   
   constructor(private http : HttpClient) {
+    
+    let bindvar = this;
+    
     this.common_db = new PouchDB('common');
     let remote_common_db = new PouchDB(`${db_url}/common`, {skip_setup: true});
     remote_common_db.logIn('timesheet_user','Socoma2020!');
@@ -120,9 +125,31 @@ export class SmartsheetService {
     this.planning_db = new PouchDB('planning');
     let remote_planning_db = new PouchDB(`${db_url}/planning`, {skip_setup: true});
     remote_planning_db.logIn('timesheet_user','Socoma2020!');
-    this.planning_db.sync(remote_planning_db, {live: true, retry: true, /* other sync options */}).on('error', console.log.bind(console));
-    
-    let bindvar = this;
+    let planningSyncHandler = this.planning_db.sync(remote_planning_db, {live: true, retry: true, /* other sync options */})
+      .on('change', function (info) {
+        console.log("change");
+        console.log(info);
+        bindvar.log.emit(info);
+      }).on('paused', function (err) {
+        console.log("paused");
+        console.log(err);
+        // replication paused (e.g. replication up to date, user went offline)
+      }).on('active', function () {
+        console.log("active");
+        // replicate resumed (e.g. new changes replicating, user went back online)
+      }).on('denied', function (err) {
+        console.log("denied");
+        console.log(err);
+        // a document failed to replicate (e.g. due to permissions)
+      }).on('complete', function (info) {
+        console.log("complete");
+        console.log(info);
+        // handle complete
+      }).on('error', function (err) {
+        console.log("error");
+        console.log(err);
+        // handle error
+      });
     
     this.planning_db.changes({
       since: 'now',
