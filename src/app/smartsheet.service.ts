@@ -17,7 +17,7 @@ PouchDB.plugin(PouchAuth)
 
 const db_url = environment.db_server;
 
-const smartsheet_url = "http://api.socomaconstruction.com/2.0";
+const smartsheet_url = "https://api.socomaconstruction.com/2.0";
 const smartsheet_token = "3w36gmndb7aax3y3ynhyg515gm";
 
 const httpOptionsCouchdb = {
