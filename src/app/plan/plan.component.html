@@ -3,10 +3,13 @@
 		<div fxFlex="80px" class="action">
 			<button mat-raised-button color="accent" (click)="sm.refreshTaskList()" style="width:100%;"><mat-icon>refresh</mat-icon></button>
 		</div>
-		<div fxFlex="155px" class="action">
+		<div fxFlex="80px" class="action">
+			<button mat-raised-button color="accent" (click)="addTask()" style="width:100%;"><mat-icon>add</mat-icon></button>
+		</div>
+		<div fxFlex="115px" class="action">
 			<button mat-raised-button color="accent" (click)="sm.previousDay()" style="width:100%;"><<<</button>
 		</div>
-		<div fxFlex="155px" class="action">
+		<div fxFlex="115px" class="action">
 			<button mat-raised-button color="accent" (click)="sm.nextDay()" style="width:100%;">>>></button>
 		</div>
 		<div fxFlex  class="day">

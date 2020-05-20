@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'edit', component: EditBudgetComponent },
   { path: 'edit/:chantier', component: EditBudgetComponent },
   { path: 'plan', component: PlanComponent },
+  { path: 'plan/:start', component: PlanComponent },
   { path: 'browse_devis', component: BrowseDevisComponent },
   { path: 'devis/:company/:number', component: BrowseDevisComponent },
 ];
